@@ -6,7 +6,7 @@ from sklearn.cluster import MiniBatchKMeans
 
 
 # KMeans clustering (MiniBatch)
-def kmeansClustering(imgPath, nClusters=256):
+def kmeansClustering(imgPath, nClusters=10):
     # Read in our image
     im = cv2.imread(imgPath)[:, :, ::-1]
 
@@ -40,39 +40,6 @@ def kmeansClustering(imgPath, nClusters=256):
 
     return im, compressed_img
 
-
-# For viewing clusters in 3-Dimensions (Lags computer even at 250)
-def plot_rgb_clusters_3d(df, kmeans, sample_size=250):
-    """
-    Visualizes clustered RGB data in 3D.
-
-    Parameters:
-        df (pd.DataFrame): DataFrame with 'R', 'G', 'B' columns.
-        kmeans (KMeans): Fitted KMeans object.
-        sample_size (int, optional): If provided, randomly samples this many points per cluster to plot.
-    """
-    df_viz = df.copy()
-    df_viz["cluster"] = kmeans.labels_
-
-    fig = plt.figure(figsize=(10, 8))
-    ax = fig.add_subplot(111, projection='3d')
-
-    for i in range(kmeans.n_clusters):
-        cluster_points = df_viz[df_viz["cluster"] == i][["R", "G", "B"]]
-        if sample_size is not None and len(cluster_points) > sample_size:
-            cluster_points = cluster_points.sample(sample_size)
-        color = kmeans.cluster_centers_[i] / 255.0  # Normalize to [0, 1]
-        ax.scatter(cluster_points["R"], cluster_points["G"], cluster_points["B"],
-                   color=color, label=f'Cluster {i}', s=1)
-
-    ax.set_xlabel("R")
-    ax.set_ylabel("G")
-    ax.set_zlabel("B")
-    ax.set_title("3D RGB Color Clusters")
-    plt.tight_layout()
-    plt.show()
-
-
 # For viewing the images next to each other
 def side_by_side(original, compressed):
     fig, ax = plt.subplots(1, 2, figsize=(12, 6))
@@ -86,7 +53,7 @@ def side_by_side(original, compressed):
     plt.show()
 
 
-images = ["RGB.png", "Starry Night.jpg", "Color Explosions.jpg"]
+images = ["birds.png"]
 for i in range(len(images)):
     original, modified = kmeansClustering(images[i])
     side_by_side(original, modified)

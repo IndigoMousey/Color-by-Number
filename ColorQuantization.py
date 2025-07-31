@@ -1,4 +1,5 @@
 import cv2
+import os
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -7,6 +8,9 @@ from sklearn.cluster import MiniBatchKMeans
 
 # KMeans clustering (MiniBatch)
 def kmeansClustering(imgPath, nClusters=10):
+    if not os.path.exists(imgPath):
+        raise FileNotFoundError(f"Image at path '{imgPath}' not found.")
+
     # Read in our image
     im = cv2.imread(imgPath)[:, :, ::-1]
 
@@ -53,7 +57,7 @@ def side_by_side(original, compressed):
     plt.show()
 
 
-images = ["birds.png"]
+images = ["bird.jpg", "oriole.jpg"]
 for i in range(len(images)):
     original, modified = kmeansClustering(images[i])
     side_by_side(original, modified)

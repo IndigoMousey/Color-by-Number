@@ -55,9 +55,3 @@ def side_by_side(original, compressed):
     ax[1].axis("off")
     plt.tight_layout()
     plt.show()
-
-
-images = ["bird.jpg", "oriole.jpg"]
-for i in range(len(images)):
-    original, modified = kmeansClustering(images[i])
-    side_by_side(original, modified)
